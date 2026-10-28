@@ -16,6 +16,9 @@ test("the homepage links to the current edition and GitHub repository", () => {
   assert.match(homepage, /<html lang="de">/);
   assert.match(homepage, /editions\/2026-10-29\/index\.html/);
   assert.match(homepage, /https:\/\/github\.com\/7amdmad\/seo-geo-radar/);
+  assert.match(homepage, /class="edition-grid"/);
+  assert.match(homepage, /class="edition-card__period"/);
+  assert.match(homepage, /class="edition-card__count">10 Highlights/);
 });
 
 test("the October sample edition contains ten sourced slides", async () => {
@@ -28,7 +31,7 @@ test("the October sample edition contains ten sourced slides", async () => {
       "utf8",
     );
     const slides = [
-      ...html.matchAll(/<section class="slide"[\s\S]*?<\/section>/g),
+      ...html.matchAll(/<section\b(?=[^>]*\bclass="slide")[^>]*>[\s\S]*?<\/section>/g),
     ].map(([slide]) => slide);
 
     assert.equal(slides.length, 10);
@@ -41,17 +44,17 @@ test("the October sample edition contains ten sourced slides", async () => {
       assert.match(slide, /<h2 class="slide__title"/);
       assert.match(slide, /class="slide__body"/);
       assert.match(slide, /class="slide__sources"/);
-      assert.match(slide, /role="img" aria-label="[^"]+"/);
+      assert.match(slide, /role="img"/);
+      assert.match(slide, /aria-label="[^"]+"/);
       assert.match(slide, /class="image-placeholder"/);
 
-      const links = [...slide.matchAll(/<a href="([^"]+)"[^>]*>/g)];
+      const links = [...slide.matchAll(/<a\b[^>]*>/gs)];
       assert.ok(links.length >= 1);
-      assert.ok(links.every(([, href]) => href.startsWith("https://")));
-      assert.equal(
-        (slide.match(/target="_blank" rel="noopener noreferrer"/g) || [])
-          .length,
-        links.length,
-      );
+      for (const [link] of links) {
+        assert.match(link, /href="https:\/\//);
+        assert.match(link, /target="_blank"/);
+        assert.match(link, /rel="noopener noreferrer"/);
+      }
     }
   }
 });
