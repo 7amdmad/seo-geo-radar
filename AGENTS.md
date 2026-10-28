@@ -15,7 +15,9 @@
 - Record publication dates and limitations in the slide content. Do not invent dates, metrics, capabilities, URLs, or implications.
 - Write clear German for marketing professionals. Keep recommendations practical and proportionate.
 - Use one to ten highlights per edition, with two to four highlighted phrases per slide.
-- Use CSS placeholders unless image reuse rights and required attribution are documented.
+- Prefer an image from the original cited article or announcement. Check its reuse rights before embedding; a public URL or attribution alone is not permission.
+- For permitted images, use the direct image URL, descriptive `alt`, and `loading="lazy"`. Credit the image host and author/copyright holder plus license or permission in the figure caption, separately from the story source link. Confirm the image URL loads.
+- Use a CSS placeholder when reuse permission or a suitable licensed image cannot be confirmed.
 - Do not add Drei logos or fonts; public use was declined.
 
 ## Creating an edition

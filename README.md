@@ -33,7 +33,7 @@ Es gibt keinen Build-Prozess, der Inhalte generiert oder veröffentlicht. Unver�
 
 Quellen müssen relevant und direkt erreichbar sein. Primärquellen haben Vorrang; Einschränkungen oder Unsicherheiten werden in der redaktionellen Prüfung festgehalten. Automatisierte Prüfungen können die Wahrheit externer Aussagen und die Erreichbarkeit fremder Server nicht zuverlässig bestätigen.
 
-Es werden keine Artikelbilder ohne bestätigte Wiederverwendungsrechte übernommen. Bis eine passende Lizenz oder Erlaubnis dokumentiert ist, verwendet die Folienansicht eigene CSS-Platzhalter. Das bereitgestellte Drei-Logo und die Schriftdateien sind nicht in die statischen Seiten eingebunden.
+Bevorzugt werden Bilder aus dem Originalartikel oder der Produktankündigung. Ein öffentlich erreichbarer Bildlink oder eine Quellenangabe allein ist keine Wiederverwendungserlaubnis. Bei freigegebenen Bildern verwendet die Folie die direkte Bild-URL mit beschreibendem Alternativtext und Lazy Loading; die Bildunterschrift nennt Bildquelle, Urheber und Lizenz bzw. Erlaubnis getrennt vom Link zur Story. Nicht freigegebene Bilder bleiben CSS-Platzhalter. Die GEO-Studienfolie nutzt eine Abbildung aus arXiv:2610.15033 unter CC BY 4.0. Das bereitgestellte Drei-Logo und die Schriftdateien sind nicht in die statischen Seiten eingebunden.
 
 ## Projektstruktur
 

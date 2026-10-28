@@ -31,22 +31,41 @@ test("the October sample edition contains ten sourced slides", async () => {
       "utf8",
     );
     const slides = [
-      ...html.matchAll(/<section\b(?=[^>]*\bclass="slide")[^>]*>[\s\S]*?<\/section>/g),
+      ...html.matchAll(
+        /<section\b(?=[^>]*\bclass="slide")[^>]*>[\s\S]*?<\/section>/g,
+      ),
     ].map(([slide]) => slide);
 
     assert.equal(slides.length, 10);
     assert.match(html, /<html lang="de">/);
     assert.match(html, /src="\.\.\/\.\.\/src\/deck\.js"/);
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
-    assert.equal(new Set(ids).size, ids.length, "edition HTML IDs must be unique");
+    assert.equal(
+      new Set(ids).size,
+      ids.length,
+      "edition HTML IDs must be unique",
+    );
 
     for (const slide of slides) {
       assert.match(slide, /<h2 class="slide__title"/);
       assert.match(slide, /class="slide__body"/);
       assert.match(slide, /class="slide__sources"/);
-      assert.match(slide, /role="img"/);
-      assert.match(slide, /aria-label="[^"]+"/);
-      assert.match(slide, /class="image-placeholder"/);
+      if (slide.includes('class="image-placeholder"')) {
+        assert.match(slide, /role="img"/);
+        assert.match(slide, /aria-label="[^"]+"/);
+      } else {
+        const image = slide.match(/<img\b[^>]*\bsrc="([^"]+)"/s);
+        assert.ok(image, "non-placeholder slides must have an image source");
+        assert.match(slide, /alt="[^"]+"/);
+        assert.match(slide, /loading="lazy"/);
+        assert.match(slide, /creativecommons\.org\/licenses\/by\/4\.0/);
+        const caption = slide.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/);
+        assert.ok(caption, "non-placeholder images must have a caption");
+        assert.ok(
+          caption[1].includes(`href="${image[1]}"`),
+          "image captions must link to the embedded image source",
+        );
+      }
 
       const links = [...slide.matchAll(/<a\b[^>]*>/gs)];
       assert.ok(links.length >= 1);
