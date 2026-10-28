@@ -37,6 +37,8 @@ test("the October sample edition contains ten sourced slides", async () => {
     ].map(([slide]) => slide);
 
     assert.equal(slides.length, 10);
+    assert.equal([...html.matchAll(/<img\b/g)].length, 10);
+    assert.doesNotMatch(html, /class="image-placeholder"/);
     assert.match(html, /<html lang="de">/);
     assert.match(html, /src="\.\.\/\.\.\/src\/deck\.js"/);
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
@@ -56,9 +58,9 @@ test("the October sample edition contains ten sourced slides", async () => {
       } else {
         const image = slide.match(/<img\b[^>]*\bsrc="([^"]+)"/s);
         assert.ok(image, "non-placeholder slides must have an image source");
+        assert.match(image[1], /^https:\/\//);
         assert.match(slide, /alt="[^"]+"/);
         assert.match(slide, /loading="lazy"/);
-        assert.match(slide, /creativecommons\.org\/licenses\/by\/4\.0/);
         const caption = slide.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/);
         assert.ok(caption, "non-placeholder images must have a caption");
         assert.ok(

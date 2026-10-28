@@ -23,7 +23,7 @@ node --test
 1. Recherchiere den vorangegangenen 14-Tage-Zeitraum mit Copilot Chat oder einem anderen Recherchewerkzeug. Das ist ein manueller Schritt; im Projekt läuft kein KI-Agent automatisch.
 2. Bitte den Agenten, die Vorgaben aus `AGENTS.md` zu befolgen und einen Kandidatenentwurf mit überprüfbaren Quellen zu erstellen.
 3. Lege für eine freigegebene Ausgabe einen neuen Ordner `editions/YYYY-MM-DD/` an und erstelle darin `index.html`. Kopiere die neueste Ausgabe als Vorlage, nicht eine ältere.
-4. Ergänze ein bis zehn Highlights mit Meldungsdatum, zwei bis drei Sätzen, Quellenlinks und Bildrechten oder CSS-Platzhaltern.
+4. Ergänze ein bis zehn Highlights mit Meldungsdatum, zwei bis drei Sätzen, Quellenlinks und jeweils einem Artikelbild mit sichtbarem Bildnachweis.
 5. Ergänze den Link und die Archivzeile in `index.html` und prüfe jede Aussage gegen die verlinkte Quelle.
 6. Führe `node --test` aus.
 
@@ -33,7 +33,9 @@ Es gibt keinen Build-Prozess, der Inhalte generiert oder veröffentlicht. Unver�
 
 Quellen müssen relevant und direkt erreichbar sein. Primärquellen haben Vorrang; Einschränkungen oder Unsicherheiten werden in der redaktionellen Prüfung festgehalten. Automatisierte Prüfungen können die Wahrheit externer Aussagen und die Erreichbarkeit fremder Server nicht zuverlässig bestätigen.
 
-Bevorzugt werden Bilder aus dem Originalartikel oder der Produktankündigung. Ein öffentlich erreichbarer Bildlink oder eine Quellenangabe allein ist keine Wiederverwendungserlaubnis. Bei freigegebenen Bildern verwendet die Folie die direkte Bild-URL mit beschreibendem Alternativtext und Lazy Loading; die Bildunterschrift nennt Bildquelle, Urheber und Lizenz bzw. Erlaubnis getrennt vom Link zur Story. Nicht freigegebene Bilder bleiben CSS-Platzhalter. Die GEO-Studienfolie nutzt eine Abbildung aus arXiv:2610.15033 unter CC BY 4.0. Das bereitgestellte Drei-Logo und die Schriftdateien sind nicht in die statischen Seiten eingebunden.
+Die Folien verwenden wie Niksas Digest direkt eingebundene, extern gehostete Bilder aus den verlinkten Artikeln oder Dokumentationsseiten. Jede Folie zeigt ein Bild mit Alternativtext, Lazy Loading und einer sichtbaren Bildunterschrift: direkter Bildlink, Host, angegebener Urheber und ein separater Link zur Bildquellenseite. Die Bild-URLs werden aus den Seiten übernommen, nicht erfunden, und vor Veröffentlichung geprüft. Allgemeine Dokumentationsgrafiken werden ausdrücklich als solche gekennzeichnet.
+
+Eine Quellenangabe oder ein Hotlink allein begründet keine Wiederverwendungserlaubnis. Die Rechte bleiben bei den jeweiligen Inhabern; bekannte Lizenzangaben und Einschränkungen werden beibehalten. Die GEO-Studienfolie nennt zusätzlich die dokumentierte CC-BY-4.0-Lizenz. Das bereitgestellte Drei-Logo und die Schriftdateien sind nicht in die statischen Seiten eingebunden.
 
 ## Projektstruktur
 
