@@ -1,6 +1,6 @@
 # SEO/GEO Radar
 
-**Die Website ist noch nicht veröffentlicht.** Die GitHub-Pages-Bereitstellung ist vorbereitet und wird manuell gestartet.
+**Live-Website:** [https://7amdmad.github.io/seo-geo-radar/](https://7amdmad.github.io/seo-geo-radar/)
 
 SEO/GEO Radar ist ein deutschsprachiger, zweiwöchentlicher Überblick zu SEO, GEO, KI-Suche und digitalem Marketing. Jede Ausgabe fasst ausgewählte Entwicklungen verständlich zusammen und verlinkt auf die Originalquellen.
 
@@ -54,7 +54,7 @@ Die committed HTML-, CSS- und JavaScript-Dateien sind bereits die Website. Es gi
 node --test
 ```
 
-GitHub Actions führt die Tests bei Änderungen aus. Der Pages-Workflow ist ausschließlich manuell startbar und veröffentlicht den Repository-Root. In den Repository-Einstellungen muss GitHub Pages als Quelle **GitHub Actions** verwenden.
+GitHub Actions führt die Tests bei Änderungen aus. Der Pages-Workflow `Deploy GitHub Pages` wird manuell gestartet und veröffentlicht den Repository-Root. GitHub Pages ist für **GitHub Actions** eingerichtet. Neue Änderungen werden erst nach einem erfolgreichen manuellen Deployment auf der Live-Website sichtbar.
 
 ## Roadmap
 
@@ -75,4 +75,4 @@ Der Quellcode steht unter der MIT-Lizenz in [LICENSE](LICENSE). Eigene redaktion
 
 ## Veröffentlichung
 
-Die Website ist derzeit **nicht live**. Nach Einrichtung von GitHub Pages kann der manuelle Workflow `Deploy GitHub Pages` gestartet werden. Erst nach erfolgreichem Workflow und Prüfung der öffentlichen URL darf diese im README als Live-Website verlinkt werden.
+Die Website ist live unter [https://7amdmad.github.io/seo-geo-radar/](https://7amdmad.github.io/seo-geo-radar/). Nach jeder freigegebenen Änderung muss der manuelle Workflow `Deploy GitHub Pages` erfolgreich abgeschlossen werden, bevor die Aktualisierung öffentlich sichtbar ist.
