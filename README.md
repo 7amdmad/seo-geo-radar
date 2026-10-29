@@ -18,14 +18,24 @@ Für die Tests wird Node.js 22 oder neuer benötigt:
 node --test
 ```
 
+## Wiederverwendbarer Recherche-Prompt
+
+Der Team-Prompt liegt in [new-deck.prompt.md](.github/prompts/new-deck.prompt.md). Im Abschnitt **Team Settings** lassen sich Themen, Fragen, Websites, Zeitraum, Zielgruppe und Folienzahl bearbeiten. Keine vertraulichen Angaben eintragen: Dieses Repository ist öffentlich.
+
+1. Bearbeite die Einstellungen im Prompt. `PREFER` priorisiert die angegebenen Websites; `ONLY` beschränkt die Belege auf diese Websites. Standardmäßig werden die letzten 14 abgeschlossenen Kalendertage in `Europe/Vienna` recherchiert.
+2. Öffne den Repository-Ordner `seo-geo-radar` als Workspace in VS Code und starte `/new-deck` in Copilot Chat. Alternativ öffne die Prompt-Datei und nutze **Run Prompt**, oder füge sie einem Chat als Anhang hinzu und bitte um Ausführung mit diesen Einstellungen.
+3. Prüfe die Kandidaten im Chat und gib Auswahl und Deck-Erstellung ausdrücklich frei. Ein Prompt-Aufruf allein erstellt oder veröffentlicht noch keine Ausgabe.
+
+Der Prompt wird manuell gestartet; es gibt keine automatische Recherche. Die Ausgabe bleibt standardmäßig deutsch. Der bestehende Deck-Inhalt wird durch das Bearbeiten der Prompt-Datei nicht verändert.
+
 ## Eine Ausgabe ergänzen
 
-1. Recherchiere den vorangegangenen 14-Tage-Zeitraum mit Copilot Chat oder einem anderen Recherchewerkzeug. Das ist ein manueller Schritt; im Projekt läuft kein KI-Agent automatisch.
+1. Starte die Recherche mit dem wiederverwendbaren Team-Prompt und den gewünschten Einstellungen. Das ist ein manueller Schritt; im Projekt läuft kein KI-Agent automatisch.
 2. Bitte den Agenten, die Vorgaben aus `AGENTS.md` zu befolgen und einen Kandidatenentwurf mit überprüfbaren Quellen zu erstellen.
 3. Lege für eine freigegebene Ausgabe einen neuen Ordner `editions/YYYY-MM-DD/` an und erstelle darin `index.html`. Kopiere die neueste Ausgabe als Vorlage, nicht eine ältere.
-4. Ergänze ein bis zehn Highlights mit Meldungsdatum, zwei bis drei Sätzen, Quellenlinks und jeweils einem Artikelbild mit sichtbarem Bildnachweis.
+4. Ergänze zehn Highlights mit zwei bis drei Sätzen, Quellenlinks, zwei bis vier hervorgehobenen Aussagen und jeweils einem Artikelbild mit sichtbarem Bildnachweis. Berichtszeitraum und Recherchestand stehen auf Deck-Ebene.
 5. Ergänze den Link und die Archivzeile in `index.html` und prüfe jede Aussage gegen die verlinkte Quelle.
-6. Führe `node --test` aus.
+6. Führe die HTML- und Inhaltsprüfungen aus dem Abschnitt **Prüfen** aus.
 
 Es gibt keinen Build-Prozess, der Inhalte generiert oder veröffentlicht. Unveröffentlichte Entwürfe gehören nicht in dieses öffentliche Repository; ein späterer privater Review-Prozess benötigt getrennte private Speicherung.
 
@@ -52,11 +62,18 @@ Die committed HTML-, CSS- und JavaScript-Dateien sind bereits die Website. Es gi
 
 ## Prüfen
 
+Die Prüfungen folgen Niksas Ablauf: HTML-Regeln und Formatierung mit djlint 1.46.1 sowie Inhaltsprüfungen für alle Ausgaben. Für lokale HTML-Prüfungen wird zusätzlich zu Node.js Python benötigt; für Besucher bleibt die Website vollständig statisch.
+
 ```sh
+python -m pip install djlint==1.46.1
+python -m djlint index.html editions
+python -m djlint --check index.html editions
 node --test
 ```
 
-GitHub Actions führt die Tests bei Änderungen aus. Der Pages-Workflow `Deploy GitHub Pages` wird manuell gestartet und veröffentlicht den Repository-Root. GitHub Pages ist für **GitHub Actions** eingerichtet. Neue Änderungen werden erst nach einem erfolgreichen manuellen Deployment auf der Live-Website sichtbar.
+Eine Formatierung lässt sich mit `python -m djlint --reformat index.html editions` korrigieren. Danach die Prüfungen erneut ausführen. Die Inhaltsprüfung kontrolliert unter anderem zehn Folien, Bilder mit Bildnachweis, Quellenlinks, zwei bis drei Sätze und zwei bis vier Hervorhebungen je Folie. Sie prüft nicht die Wahrheit externer Aussagen.
+
+Pull Requests werden automatisch geprüft. Ein Push auf `main` startet den Pages-Workflow: Er führt zuerst denselben Prüfworkflow aus und veröffentlicht den Repository-Root nur bei Erfolg. Bei fehlgeschlagenen Prüfungen bleibt die bisherige Website unverändert. Ein manueller Workflow-Start bleibt möglich. GitHub Pages ist für **GitHub Actions** eingerichtet.
 
 ## Roadmap
 
@@ -77,4 +94,4 @@ Der Quellcode steht unter der MIT-Lizenz in [LICENSE](LICENSE). Eigene redaktion
 
 ## Veröffentlichung
 
-Die Website ist live unter [https://7amdmad.github.io/seo-geo-radar/](https://7amdmad.github.io/seo-geo-radar/). Nach jeder freigegebenen Änderung muss der manuelle Workflow `Deploy GitHub Pages` erfolgreich abgeschlossen werden, bevor die Aktualisierung öffentlich sichtbar ist.
+Die Website ist live unter [https://7amdmad.github.io/seo-geo-radar/](https://7amdmad.github.io/seo-geo-radar/). Nach ausdrücklicher Freigabe werden Änderungen committed und auf `main` gepusht. Dieser Push veröffentlicht die Änderung automatisch, sobald alle Prüfungen erfolgreich sind. Ohne Freigabe wird nicht gepusht; das Bearbeiten lokaler Dateien allein veröffentlicht nichts.

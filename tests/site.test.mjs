@@ -13,16 +13,25 @@ const editionFolders = (await readdir(editionsPath, { withFileTypes: true }))
   .sort();
 
 test("the homepage links to the current edition and GitHub repository", () => {
+  assert.ok(editionFolders.length > 0, "at least one edition must exist");
   assert.match(homepage, /<html lang="de">/);
-  assert.match(homepage, /editions\/2026-10-29\/index\.html/);
+  for (const folder of editionFolders) {
+    assert.ok(
+      homepage.includes(`editions/${folder}/index.html`),
+      `${folder} must appear in the archive`,
+    );
+  }
   assert.match(homepage, /https:\/\/github\.com\/7amdmad\/seo-geo-radar/);
   assert.match(homepage, /class="edition-grid"/);
   assert.match(homepage, /class="edition-card__period"/);
   assert.match(homepage, /class="edition-card__count">10 Highlights/);
 });
 
-test("the October sample edition contains ten sourced slides", async () => {
-  assert.deepEqual(editionFolders, ["2026-10-29"]);
+test("every edition contains ten sourced slides", async () => {
+  assert.ok(
+    editionFolders.includes("2026-10-29"),
+    "preserve the original edition",
+  );
 
   for (const folder of editionFolders) {
     assert.match(folder, /^\d{4}-\d{2}-\d{2}$/);
@@ -32,7 +41,7 @@ test("the October sample edition contains ten sourced slides", async () => {
     );
     const slides = [
       ...html.matchAll(
-        /<section\b(?=[^>]*\bclass="slide")[^>]*>[\s\S]*?<\/section>/g,
+        /<section\b(?=[^>]*\bclass="slide(?:\s[^"]*)?")[^>]*>[\s\S]*?<\/section>/g,
       ),
     ].map(([slide]) => slide);
 
@@ -41,6 +50,8 @@ test("the October sample edition contains ten sourced slides", async () => {
     assert.doesNotMatch(html, /class="image-placeholder"/);
     assert.match(html, /<html lang="de">/);
     assert.match(html, /src="\.\.\/\.\.\/src\/deck\.js"/);
+    assert.match(html, /href="\.\.\/\.\.\/index\.html(?:#[^"]*)?"/);
+    assert.match(html, /<meta\s+name="description"/);
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
     assert.equal(
       new Set(ids).size,
@@ -52,22 +63,44 @@ test("the October sample edition contains ten sourced slides", async () => {
       assert.match(slide, /<h2 class="slide__title"/);
       assert.match(slide, /class="slide__body"/);
       assert.match(slide, /class="slide__sources"/);
-      if (slide.includes('class="image-placeholder"')) {
-        assert.match(slide, /role="img"/);
-        assert.match(slide, /aria-label="[^"]+"/);
-      } else {
-        const image = slide.match(/<img\b[^>]*\bsrc="([^"]+)"/s);
-        assert.ok(image, "non-placeholder slides must have an image source");
-        assert.match(image[1], /^https:\/\//);
-        assert.match(slide, /alt="[^"]+"/);
-        assert.match(slide, /loading="lazy"/);
-        const caption = slide.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/);
-        assert.ok(caption, "non-placeholder images must have a caption");
-        assert.ok(
-          caption[1].includes(`href="${image[1]}"`),
-          "image captions must link to the embedded image source",
-        );
-      }
+      const body = slide.match(
+        /<p\b[^>]*class="slide__body"[^>]*>([\s\S]*?)<\/p>/,
+      );
+      assert.ok(body, "each slide needs summary text");
+      const emphasis = [...body[1].matchAll(/<strong\b/g)].length;
+      assert.ok(
+        emphasis >= 2 && emphasis <= 4,
+        `${folder}: each summary needs 2-4 highlighted phrases`,
+      );
+      const text = body[1]
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      const sentences = [
+        ...new Intl.Segmenter("de", { granularity: "sentence" }).segment(text),
+      ];
+      assert.ok(
+        sentences.length >= 2 && sentences.length <= 3,
+        `${folder}: expected 2-3 sentences, got ${sentences.length}: ${text}`,
+      );
+      assert.equal(
+        [...slide.matchAll(/<img\b/g)].length,
+        1,
+        "each slide needs exactly one image",
+      );
+      const image = slide.match(/<img\b[^>]*\bsrc="([^"]+)"/s);
+      assert.ok(image, "non-placeholder slides must have an image source");
+      assert.match(image[1], /^https:\/\//);
+      assert.match(slide, /alt="[^"]+"/);
+      assert.match(slide, /loading="lazy"/);
+      const caption = slide.match(
+        /<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/,
+      );
+      assert.ok(caption, "non-placeholder images must have a caption");
+      assert.ok(
+        caption[1].includes(`href="${image[1]}"`),
+        "image captions must link to the embedded image source",
+      );
 
       const links = [...slide.matchAll(/<a\b[^>]*>/gs)];
       assert.ok(links.length >= 1);

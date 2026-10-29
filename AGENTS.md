@@ -14,7 +14,7 @@
 - Prefer original announcements and documentation; use reputable reporting when primary evidence is unavailable or incomplete.
 - Record publication dates and limitations in the slide content. Do not invent dates, metrics, capabilities, URLs, or implications.
 - Write clear German for marketing professionals. Keep recommendations practical and proportionate.
-- Use one to ten highlights per edition, with two to four highlighted phrases per slide.
+- Use exactly ten slides per edition, each with a headline, two to three summary sentences, and two to four highlighted phrases.
 - Match Niksa's article-image workflow: each slide has one externally hosted image harvested from its cited article, announcement, or documentation page. Never invent image URLs.
 - Use the direct image URL, descriptive `alt`, and `loading="lazy"`. The visible figure caption links to the image file, names the host and credited creator, and separately links to the page containing it. Verify both URLs and inspect the rendered image.
 - Preserve documented credits and licenses. Attribution and hotlinking do not establish reuse permission; never invent permission or label an unlicensed image as CC BY. Respect explicit restrictions and removal requests.
@@ -28,7 +28,7 @@
 3. Copy the newest edition folder to a new `editions/YYYY-MM-DD/` folder.
 4. Update its date, reporting period, slides, source links, and credited article images.
 5. Add the new edition link to the homepage archive and current-edition section.
-6. Run `node --test` and manually compare every claim with its cited source.
+6. Run `python -m djlint index.html editions`, `python -m djlint --check index.html editions`, and `node --test`. Use djlint 1.46.1. Manually compare every claim with its cited source.
 
 ## Engineering rules
 
@@ -36,7 +36,7 @@
 - Escape or carefully encode any untrusted text inserted into HTML attributes or markup.
 - Preserve keyboard, direct-hash, touch, reduced-motion, and screen-reader slide navigation.
 - Require one sourced image and visible image credits per slide; do not require a particular license for every publisher.
-- Keep the Pages workflow manual. Do not commit, push, or publish without explicit approval.
+- Pushing to `main` automatically runs the shared checks workflow and deploys only if it succeeds. Do not commit or push without explicit approval; an approved push to `main` also authorizes that deployment.
 
 Agent instructions are maintained as byte-identical copies in `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`. Update all three together.
 Do not add paid services, API credentials, or unpublished drafts to this public project.

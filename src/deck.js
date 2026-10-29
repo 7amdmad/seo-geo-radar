@@ -9,6 +9,7 @@ const slidesContainer = document.querySelector(".slides");
 
 let currentIndex = 0;
 let touchStartX = null;
+let transitionTimer = null;
 
 const clampIndex = (index) => Math.max(0, Math.min(slides.length - 1, index));
 
@@ -20,12 +21,15 @@ const parseHashIndex = () => {
   return index >= 0 && index < slides.length ? index : null;
 };
 
-const updateUI = () => {
+const updateUI = (outgoingSlide = null) => {
   const activeSlide = slides[currentIndex];
   slides.forEach((slide, index) => {
     const active = index === currentIndex;
-    slide.hidden = !active;
+    slide.hidden = !active && slide !== outgoingSlide;
+    slide.inert = !active;
+    slide.setAttribute("aria-hidden", String(!active));
     slide.classList.toggle("is-active", active);
+    slide.classList.toggle("is-exiting", slide === outgoingSlide);
   });
 
   if (progressFill) {
@@ -50,8 +54,24 @@ const goToSlide = (index, updateHash = true) => {
   const nextIndex = clampIndex(index);
   if (nextIndex === currentIndex) return;
 
+  window.clearTimeout(transitionTimer);
+  const outgoingSlide = slides[currentIndex];
+  const animate =
+    slidesContainer &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (slidesContainer) {
+    slidesContainer.dataset.direction =
+      nextIndex > currentIndex ? "forward" : "backward";
+    slidesContainer.classList.toggle("is-transitioning", Boolean(animate));
+  }
   currentIndex = nextIndex;
-  updateUI();
+  updateUI(animate ? outgoingSlide : null);
+  if (animate) {
+    transitionTimer = window.setTimeout(() => {
+      slidesContainer.classList.remove("is-transitioning");
+      updateUI();
+    }, 420);
+  }
   if (updateHash) {
     window.history.replaceState(null, "", `#slide-${currentIndex + 1}`);
   }
