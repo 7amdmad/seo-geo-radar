@@ -28,6 +28,8 @@ Der Team-Prompt liegt in [new-deck.prompt.md](.github/prompts/new-deck.prompt.md
 
 Der Prompt wird manuell gestartet; es gibt keine automatische Recherche. Die Ausgabe bleibt standardmäßig deutsch. Der bestehende Deck-Inhalt wird durch das Bearbeiten der Prompt-Datei nicht verändert.
 
+Für eine thematisch eingegrenzte Recherche gibt es zusätzlich [focused-research.prompt.md](.github/prompts/focused-research.prompt.md), startbar mit `/focused-research` oder über **Run Prompt**. Standardmäßig untersucht er Reddit und YouTube im Hinblick auf KI-Sichtbarkeit, sucht auf Deutsch und Englisch und liefert deutsche Kandidaten für die Teamprüfung. Ältere Erkenntnisse werden bei Bedarf ausdrücklich als Hintergrund gekennzeichnet. Die hinterlegte Artikel-URL wird bei jedem manuellen Lauf erneut geprüft; eine automatische Überwachung ist damit nicht eingerichtet. Der allgemeine Prompt `/new-deck` bleibt unverändert verfügbar.
+
 ## Eine Ausgabe ergänzen
 
 1. Starte die Recherche mit dem wiederverwendbaren Team-Prompt und den gewünschten Einstellungen. Das ist ein manueller Schritt; im Projekt läuft kein KI-Agent automatisch.
